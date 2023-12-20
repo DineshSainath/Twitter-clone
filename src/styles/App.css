@@ -15,7 +15,8 @@ body {
   flex: 1;
   display: flex;
   overflow-y: auto;
-  border-right: 1px solid #fff;
+  padding-left: 400px;
+  border-left: 1px solid #fff;
   max-height: 100vh;
 }
 
@@ -24,4 +25,6 @@ body {
   padding: 20px;
   background-color: black;
   color: white;
+  border-left: 1px solid #fff;
+
 }
