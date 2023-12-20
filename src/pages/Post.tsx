@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+// Post.tsx
+import React, { useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
 
@@ -12,21 +13,31 @@ interface Comment {
 const Post: React.FC = () => {
   const { postId } = useParams<{ postId?: string }>()
 
+  const postIdNumber = useMemo(
+    () => (postId ? parseInt(postId, 10) : NaN),
+    [postId]
+  )
+  const postUrl = useMemo(
+    () => `https://jsonplaceholder.typicode.com/posts/${postIdNumber}`,
+    [postIdNumber]
+  )
+  const commentsUrl = useMemo(
+    () =>
+      `https://jsonplaceholder.typicode.com/comments?postId=${postIdNumber}`,
+    [postIdNumber]
+  )
+
   const [post, setPost] = useState<{ title: string; body: string } | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (!postId) {
-      setError('Post ID not provided.')
+    if (isNaN(postIdNumber)) {
+      setError('Invalid Post ID.')
       setLoading(false)
       return
     }
-
-    const postIdNumber = parseInt(postId, 10)
-    const postUrl = `https://jsonplaceholder.typicode.com/posts/${postIdNumber}`
-    const commentsUrl = `https://jsonplaceholder.typicode.com/comments?postId=${postIdNumber}`
 
     axios
       .get(postUrl)
@@ -47,7 +58,7 @@ const Post: React.FC = () => {
         setError(err)
         setLoading(false)
       })
-  }, [postId])
+  }, [postIdNumber, postUrl, commentsUrl])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>
