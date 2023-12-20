@@ -71,6 +71,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   }
 
   const createPost = (post: Post) => {
+    setPosts([post, ...posts])
     setUserPosts([post, ...userPosts])
   }
 

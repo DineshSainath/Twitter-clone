@@ -1,5 +1,5 @@
 // Profile.tsx
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { useAppContext } from '../components/Context'
 import { useParams } from 'react-router-dom'
 import PostCard from '../components/PostCard'
@@ -21,11 +21,11 @@ interface Post {
 }
 
 const Profile: React.FC = () => {
-  const { user, fetchUser, userPosts, fetchPosts, loading, error, createPost } =
+  const { user, fetchUser, posts, fetchPosts, loading, error, createPost } =
     useAppContext()
   const { id } = useParams<{ id?: string }>()
   const userId = id ? parseInt(id, 10) : null
-  const [isAddPostOpen, setIsAddPostOpen] = useState(false)
+  const [isAddPostOpen, setIsAddPostOpen] = React.useState(false)
 
   const handleAddPostClick = () => {
     setIsAddPostOpen(true)
@@ -42,18 +42,21 @@ const Profile: React.FC = () => {
         await fetchUser(userId)
 
         // Fetch posts if posts haven't been fetched yet
-        if (userPosts.length === 0) {
+        if (posts.length === 0) {
           await fetchPosts()
         }
       }
     }
 
     fetchData()
-  }, [userId, fetchUser, fetchPosts, userPosts.length])
+  }, [userId, fetchUser, fetchPosts, posts.length])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>
   if (!user) return <p>User not found.</p>
+
+  // Filter posts for the current user
+  const userPosts = posts.filter((post) => post.userId === user.id)
 
   return (
     <div>
