@@ -1,10 +1,29 @@
+// src/App.tsx
 import React from 'react'
-import './styles/App.css'
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom'
+import Home from './pages/Home'
+import Profile from './pages/Profile'
+import Login from './pages/Login'
 
-function App() {
+const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header"></header>
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route // authentication - do later
+            path="/profile"
+            element={true ? <Profile /> : <Navigate to="/login" />}
+          />
+        </Routes>
+      </Router>
     </div>
   )
 }
