@@ -15,7 +15,7 @@ body {
   display: flex;
   justify-content: center;
   overflow-y: auto;
-  padding-left: 400px;
+  padding-left: 380px;
   border-left: 1px solid #fff;
   max-height: 100vh;
 }

@@ -1,6 +1,8 @@
+// Home.tsx
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import PostCard from '../components/PostCard'
+import '../styles/Home.css'
 
 interface Post {
   id: number
@@ -32,9 +34,14 @@ const Home: React.FC = () => {
 
   return (
     <div className="home">
-      Home Page
+      <p className="heading">Home Page</p>
       {posts.map((post) => (
-        <PostCard key={post.id} title={post.title} body={post.body} />
+        <PostCard
+          key={post.id}
+          postId={post.id}
+          title={post.title}
+          body={post.body}
+        />
       ))}
     </div>
   )
