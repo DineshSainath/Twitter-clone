@@ -5,12 +5,18 @@ import { useParams } from 'react-router-dom'
 import PostCard from '../components/PostCard'
 import AddPost from '../components/AddPost'
 import axios from 'axios'
+import ProfileCard from '../components/ProfileCard'
 
 interface User {
   id: number
   name: string
   username: string
   email: string
+  phone: string
+  website: string
+  company: {
+    name: string
+  }
 }
 
 interface Post {
@@ -55,15 +61,23 @@ const Profile: React.FC = () => {
   if (error) return <p>{error}</p>
   if (!user) return <p>User not found.</p>
 
-  // Filter posts for the current user
+  // Filter posts with userID
   const userPosts = posts.filter((post) => post.userId === user.id)
 
   return (
     <div>
-      <h2>{user.name}'s Profile</h2>
-      <p>Email: {user.email}</p>
+      {/* <h2>{user.name}'s Profile</h2>
+      <p>Email: {user.email}</p> */}
+      <ProfileCard
+        name={user.name}
+        userName={user.username}
+        email={user.email}
+        phone={user.phone}
+        website={user.website}
+        companyName={user.company.name}
+      />
 
-      <h3>Posts:</h3>
+      <h3 className="heading">Posts:</h3>
       {userPosts.map((post) => (
         <PostCard
           key={post.id}

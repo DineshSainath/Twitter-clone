@@ -12,3 +12,9 @@
   cursor: pointer;
   z-index: 1000;
 }
+
+.heading {
+  margin: 0 auto;
+  margin-bottom: 10px;
+  text-align: center;
+}
