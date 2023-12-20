@@ -17,11 +17,8 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route
-              path="/posts/:postId"
-              element={<Post />} // Provide the correct postId as a string
-            />
+            <Route path="/profile/:id" element={<Profile />} />
+            <Route path="/posts/:postId" element={<Post />} />
           </Routes>
         </div>
         <div className="right-content">

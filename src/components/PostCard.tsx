@@ -14,7 +14,7 @@ const PostCard: React.FC<PostCardProps> = ({ postId, title, body }) => {
     <div className="post-card">
       <h3>{title}</h3>
       <p>{body}</p>
-      <Link to={`/posts/${postId}`}>View Details</Link>
+      <Link to={`/posts/${postId}`}>Comments</Link>
     </div>
   )
 }
