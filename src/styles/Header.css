@@ -1,0 +1,16 @@
+.App-header {
+  background-color: black;
+  max-height: 10vh;
+  display: flex;
+  align-items: center;
+  color: white;
+  max-width: 325px;
+  padding-bottom: 3em;
+}
+
+.twt-logo {
+  height: 60px;
+  width: 60px;
+  margin-left: 15em;
+  top: 0;
+}

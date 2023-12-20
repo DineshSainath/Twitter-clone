@@ -1,0 +1,29 @@
+.sidebar {
+  height: 100%;
+  width: 300px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: black;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding-right: 5em;
+
+  border-right: 1px solid #ddd;
+}
+
+.sidebar a {
+  padding: 8px;
+  text-decoration: none;
+  font-size: 18px;
+  color: white;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.sidebar a:hover {
+  background-color: #ddd;
+  color: black;
+}
