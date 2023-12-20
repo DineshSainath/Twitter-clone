@@ -1,6 +1,9 @@
-import React, { useEffect } from 'react'
+// Profile.tsx
+import React, { useEffect, useState } from 'react'
 import { useAppContext } from '../components/Context'
 import { useParams } from 'react-router-dom'
+import PostCard from '../components/PostCard'
+import AddPost from '../components/AddPost'
 import axios from 'axios'
 
 interface User {
@@ -18,9 +21,19 @@ interface Post {
 }
 
 const Profile: React.FC = () => {
-  const { user, fetchUser, posts, fetchPosts, loading, error } = useAppContext()
+  const { user, fetchUser, userPosts, fetchPosts, loading, error, createPost } =
+    useAppContext()
   const { id } = useParams<{ id?: string }>()
   const userId = id ? parseInt(id, 10) : null
+  const [isAddPostOpen, setIsAddPostOpen] = useState(false)
+
+  const handleAddPostClick = () => {
+    setIsAddPostOpen(true)
+  }
+
+  const handleCloseAddPost = () => {
+    setIsAddPostOpen(false)
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,23 +42,18 @@ const Profile: React.FC = () => {
         await fetchUser(userId)
 
         // Fetch posts if posts haven't been fetched yet
-        if (posts.length === 0) {
+        if (userPosts.length === 0) {
           await fetchPosts()
         }
       }
     }
 
     fetchData()
-  }, [userId, fetchUser, fetchPosts, posts.length])
+  }, [userId, fetchUser, fetchPosts, userPosts.length])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>
   if (!user) return <p>User not found.</p>
-
-  // Filter posts for the current user
-  // const userPosts = posts.filter((post) => console.log)
-
-  const userPosts = posts.filter((post) => (post as Post).userId === user.id)
 
   return (
     <div>
@@ -54,11 +62,17 @@ const Profile: React.FC = () => {
 
       <h3>Posts:</h3>
       {userPosts.map((post) => (
-        <div key={post.id}>
-          <h4>{post.title}</h4>
-          <p>{post.body}</p>
-        </div>
+        <PostCard
+          key={post.id}
+          postId={post.id}
+          title={post.title}
+          body={post.body}
+        />
       ))}
+      {isAddPostOpen && <AddPost onClose={handleCloseAddPost} />}
+      <button className="add-post-button" onClick={handleAddPostClick}>
+        +
+      </button>
     </div>
   )
 }

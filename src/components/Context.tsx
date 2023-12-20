@@ -11,10 +11,12 @@ import axios from 'axios'
 interface AppContextProps {
   user: User | null
   posts: Post[]
+  userPosts: Post[]
   loading: boolean
   error: string | null
   fetchUser: (userId: number) => void
   fetchPosts: () => void
+  createPost: (post: Post) => void
 }
 
 interface User {
@@ -26,6 +28,7 @@ interface User {
 
 interface Post {
   id: number
+  userId: number
   title: string
   body: string
 }
@@ -37,6 +40,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null)
   const [posts, setPosts] = useState<Post[]>([])
+  const [userPosts, setUserPosts] = useState<Post[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -56,6 +60,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       .get('https://jsonplaceholder.typicode.com/posts')
       .then((res) => {
         setPosts(res.data)
+        setUserPosts(res.data)
       })
       .catch((err) => {
         setError(err.response?.data.message || 'Error fetching posts.')
@@ -65,6 +70,10 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
       })
   }
 
+  const createPost = (post: Post) => {
+    setUserPosts([post, ...userPosts])
+  }
+
   useEffect(() => {
     fetchPosts()
   }, [])
@@ -72,10 +81,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({
   const contextValue: AppContextProps = {
     user,
     posts,
+    userPosts,
     loading,
     error,
     fetchUser,
     fetchPosts,
+    createPost,
   }
 
   return (
