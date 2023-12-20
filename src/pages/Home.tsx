@@ -1,33 +1,11 @@
 // Home.tsx
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React from 'react'
+import { useAppContext } from '../components/Context'
 import PostCard from '../components/PostCard'
 import '../styles/Home.css'
 
-interface Post {
-  id: number
-  title: string
-  body: string
-}
-
 const Home: React.FC = () => {
-  const postUrl = 'https://jsonplaceholder.typicode.com/posts'
-  const [posts, setPosts] = useState<Post[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    axios
-      .get(postUrl)
-      .then((res) => {
-        setPosts(res.data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        setError(err.message)
-        setLoading(false)
-      })
-  }, [])
+  const { posts, loading, error } = useAppContext()
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>

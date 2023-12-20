@@ -1,7 +1,7 @@
-// Post.tsx
-import React, { useState, useEffect, useMemo } from 'react'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react'
+import { useAppContext } from '../components/Context'
 import { useParams } from 'react-router-dom'
+import axios from 'axios'
 
 interface Comment {
   id: number
@@ -11,64 +11,46 @@ interface Comment {
 }
 
 const Post: React.FC = () => {
+  const { posts, loading, error, fetchPosts } = useAppContext()
   const { postId } = useParams<{ postId?: string }>()
 
-  const postIdNumber = useMemo(
-    () => (postId ? parseInt(postId, 10) : NaN),
-    [postId]
-  )
-  const postUrl = useMemo(
-    () => `https://jsonplaceholder.typicode.com/posts/${postIdNumber}`,
-    [postIdNumber]
-  )
-  const commentsUrl = useMemo(
-    () =>
-      `https://jsonplaceholder.typicode.com/comments?postId=${postIdNumber}`,
-    [postIdNumber]
-  )
+  const post = posts.find((p) => p.id.toString() === postId)
 
-  const [post, setPost] = useState<{ title: string; body: string } | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    if (isNaN(postIdNumber)) {
-      setError('Invalid Post ID.')
-      setLoading(false)
-      return
+    const fetchComments = async () => {
+      if (postId) {
+        try {
+          const response = await axios.get(
+            `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
+          )
+          setComments(response.data)
+        } catch (error) {
+          console.error('Error fetching comments:', error)
+        }
+      }
     }
 
-    axios
-      .get(postUrl)
-      .then((res) => {
-        setPost(res.data)
-      })
-      .catch((err) => {
-        setError(err)
-      })
+    fetchComments()
+  }, [postId])
 
-    axios
-      .get(commentsUrl)
-      .then((res) => {
-        setComments(res.data)
-        setLoading(false)
-      })
-      .catch((err) => {
-        setError(err)
-        setLoading(false)
-      })
-  }, [postIdNumber, postUrl, commentsUrl])
+  useEffect(() => {
+    if (!post) {
+      // Fetch the post if it's not available
+      fetchPosts()
+    }
+  }, [post, fetchPosts])
 
   if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>
-
   if (!post) return <p>Post not found.</p>
 
   return (
     <div>
       <h2>{post.title}</h2>
       <p>{post.body}</p>
+
       <h3>Comments:</h3>
       {comments.map((comment) => (
         <div key={comment.id}>
