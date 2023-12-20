@@ -20,7 +20,7 @@ const App: React.FC = () => {
             <Route path="/profile" element={<Profile />} />
             <Route
               path="/posts/:postId"
-              element={<Post postId={1} title="" body="" />} // You need to provide the correct props
+              element={<Post />} // Provide the correct postId as a string
             />
           </Routes>
         </div>

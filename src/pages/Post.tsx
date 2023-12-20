@@ -9,20 +9,34 @@ interface Comment {
   body: string
 }
 
-interface PostProps {
-  postId: number
-  title: string
-  body: string
-}
+const Post: React.FC = () => {
+  const { postId } = useParams<{ postId?: string }>()
 
-const Post: React.FC<PostProps> = ({ postId, title, body }) => {
-  const commentsUrl = `https://jsonplaceholder.typicode.com/comments?postId=${postId}`
-
+  const [post, setPost] = useState<{ title: string; body: string } | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!postId) {
+      setError('Post ID not provided.')
+      setLoading(false)
+      return
+    }
+
+    const postIdNumber = parseInt(postId, 10)
+    const postUrl = `https://jsonplaceholder.typicode.com/posts/${postIdNumber}`
+    const commentsUrl = `https://jsonplaceholder.typicode.com/comments?postId=${postIdNumber}`
+
+    axios
+      .get(postUrl)
+      .then((res) => {
+        setPost(res.data)
+      })
+      .catch((err) => {
+        setError(err)
+      })
+
     axios
       .get(commentsUrl)
       .then((res) => {
@@ -35,13 +49,15 @@ const Post: React.FC<PostProps> = ({ postId, title, body }) => {
       })
   }, [postId])
 
-  if (loading) return <p>Loading comments...</p>
+  if (loading) return <p>Loading...</p>
   if (error) return <p>{error}</p>
+
+  if (!post) return <p>Post not found.</p>
 
   return (
     <div>
-      <h2>{title}</h2>
-      <p>{body}</p>
+      <h2>{post.title}</h2>
+      <p>{post.body}</p>
       <h3>Comments:</h3>
       {comments.map((comment) => (
         <div key={comment.id}>
