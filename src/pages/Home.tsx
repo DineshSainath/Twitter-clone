@@ -22,7 +22,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="home">
-      <p className="heading">Home Page</p>
+      <h2 className="heading">Home Page</h2>
       {userPosts.map((post) => (
         <PostCard
           key={post.id}

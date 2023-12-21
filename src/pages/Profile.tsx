@@ -6,6 +6,7 @@ import PostCard from '../components/PostCard'
 import AddPost from '../components/AddPost'
 import axios from 'axios'
 import ProfileCard from '../components/ProfileCard'
+import '../styles/Profile.css'
 
 interface User {
   id: number
@@ -77,7 +78,7 @@ const Profile: React.FC = () => {
         companyName={user.company.name}
       />
 
-      <h3 className="heading">Posts:</h3>
+      <h3 className="p-heading">Posts</h3>
       {userPosts.map((post) => (
         <PostCard
           key={post.id}

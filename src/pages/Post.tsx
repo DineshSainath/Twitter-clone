@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { useAppContext } from '../components/Context'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import CommentCard from '../components/CommentCard' // Import the CommentCard component
+import '../styles/Post.css'
 
 interface Comment {
   id: number
@@ -48,14 +50,14 @@ const Post: React.FC = () => {
 
   return (
     <div>
-      <h2>{post.title}</h2>
-      <p>{post.body}</p>
+      <div className="post-card">
+        <h2>{post.title}</h2>
+        <p>{post.body}</p>
+      </div>
 
-      <h3>Comments:</h3>
+      <h3 className="C-heading">Comments:</h3>
       {comments.map((comment) => (
-        <div key={comment.id}>
-          <strong>{comment.name}</strong> ({comment.email}): {comment.body}
-        </div>
+        <CommentCard key={comment.id} comment={comment} />
       ))}
     </div>
   )
